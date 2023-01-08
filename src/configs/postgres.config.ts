@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Token } from 'src/modules/auth/model/token.entity';
-import { User } from 'src/modules/user/model/user.entity';
+import { Token } from 'src/modules/auth/model/token.model';
+import { User } from 'src/modules/user/model/user.model';
 
 export const getPostgresConfig = async (
   configService: ConfigService,
