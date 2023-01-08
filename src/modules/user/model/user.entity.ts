@@ -1,12 +1,15 @@
+import { Token } from 'src/modules/auth/model/token.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToOne,
 } from 'typeorm';
+import { USER_TABLE_NAME } from '../constants';
 
-@Entity()
+@Entity(USER_TABLE_NAME)
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,4 +25,7 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastChangedDateTime: Date;
+
+  @OneToOne(() => Token, (token) => token.id)
+  userId: Token;
 }
