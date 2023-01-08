@@ -1,3 +1,4 @@
 import appConfig from './app.config';
+import { getPostgresConfig } from './postgres.config';
 
-export { appConfig };
+export { appConfig, getPostgresConfig };
