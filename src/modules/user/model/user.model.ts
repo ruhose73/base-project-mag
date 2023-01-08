@@ -1,4 +1,4 @@
-import { Token } from 'src/modules/auth/model/token.entity';
+import { Token } from 'src/modules/auth/model/token.model';
 import {
   Entity,
   PrimaryGeneratedColumn,
