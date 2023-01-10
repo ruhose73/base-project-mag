@@ -1,11 +1,10 @@
-import { Token } from 'src/modules/auth/model/token.model';
+import { UserRole } from 'src/enums';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   UpdateDateColumn,
   CreateDateColumn,
-  OneToOne,
 } from 'typeorm';
 import { USER_TABLE_NAME } from '../constants';
 
@@ -14,7 +13,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: false })
+  @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
   login: string;
 
   @Column({ type: 'varchar', length: 20, nullable: false })
@@ -22,6 +21,14 @@ export class User {
 
   @Column({ type: 'varchar', nullable: false })
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.User,
+    nullable: false,
+  })
+  role: UserRole;
 
   @Column({ type: 'boolean', default: false })
   isActive: boolean;
@@ -31,7 +38,4 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastChangedDateTime: Date;
-
-  @OneToOne(() => Token, (token) => token.id)
-  userId: Token;
 }

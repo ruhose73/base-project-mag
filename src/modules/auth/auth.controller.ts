@@ -1,14 +1,14 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Register, Tokens } from './interfaces';
+import { Login, Register, Tokens } from './interfaces';
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
-  async login(): Promise<Tokens> {
-    return this.authService.login();
+  async login(@Body() user: Login): Promise<Tokens> {
+    return this.authService.login(user);
   }
 
   @Post('/register')
