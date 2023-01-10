@@ -1,25 +1,20 @@
-import { UserRole } from 'src/enums/users-roles.enum';
+import { Login, Register, UpdatePasswordPayload } from './auth.interface';
 
-export type AccessToken = string;
-export type RefreshToken = string;
+import {
+  Tokens,
+  JWTPayload,
+  TokenCreationAttributes,
+  AccessToken,
+  RefreshToken,
+} from './token.interface';
 
-export class Tokens {
-  accessToken: AccessToken;
-  refreshToken: RefreshToken;
-}
-
-export interface IJWTPayload {
-  id: string;
-  role: UserRole;
-}
-
-export interface UpdatePasswordPayload {
-  id: string;
-  newPassword: string;
-}
-
-export interface TokenCreationAttributes {
-  userId: string;
-  accessToken?: AccessToken;
-  refreshToken: RefreshToken;
-}
+export {
+  Login,
+  Register,
+  UpdatePasswordPayload,
+  Tokens,
+  JWTPayload,
+  TokenCreationAttributes,
+  AccessToken,
+  RefreshToken,
+};

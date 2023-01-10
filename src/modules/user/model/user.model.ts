@@ -15,6 +15,12 @@ export class User {
   id: string;
 
   @Column({ type: 'varchar', length: 20, nullable: false })
+  login: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: false })
+  name: string;
+
+  @Column({ type: 'varchar', nullable: false })
   password: string;
 
   @Column({ type: 'boolean', default: false })
