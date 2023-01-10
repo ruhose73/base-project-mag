@@ -1,91 +1,57 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import {
-  AccessToken,
-  JWTPayload,
-  Login,
-  RefreshToken,
-  Register,
-  Tokens,
-} from './interfaces';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { JWTPayload, Tokens } from './interfaces';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/model/user.model';
 import { compare, genSalt, hash } from 'bcryptjs';
-import { UserRole } from 'src/enums';
-import { JwtService } from '@nestjs/jwt';
-import { v4 as uuidv4 } from 'uuid';
+import { TokenService } from './token.service';
+import { LoginDto, RegisterDto } from './dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private jwtService: JwtService,
+    private readonly tokenService: TokenService,
   ) {}
 
-  async login(loginData: Login): Promise<Tokens> {
+  async login(dto: LoginDto): Promise<Tokens> {
     const user = await this.userRepository.findOneBy({
-      login: loginData.login,
+      login: dto.login,
     });
     if (!user) {
       throw new BadRequestException(`wrong data`);
     }
-    if (!(await compare(loginData.password, user.password))) {
+    if (!(await compare(dto.password, user.password))) {
       throw new BadRequestException(`wrong data`);
     }
-
-    const data = await this.userRepository.update(
-      {
-        id: user.id,
-      },
-      {
-        role: UserRole.Admin,
-      },
-    );
-
-    return await this.generateTokens({
+    return await this.tokenService.generateTokens({
       id: user.id,
       role: user.role,
     });
   }
 
-  async register(user: Register): Promise<Tokens> {
-    user.password = await hash(user.password, await genSalt(10));
-    const createUser = await this.userRepository.save(user);
-    const tokens = await this.generateTokens({
+  async register(dto: RegisterDto): Promise<Tokens> {
+    const candidate = await this.userRepository.findOneBy({
+      login: dto.login,
+    });
+    if (candidate) {
+      throw new BadRequestException(`login already in use`);
+    }
+    dto.password = await hash(dto.password, await genSalt(10));
+    const createUser = await this.userRepository.save(dto);
+    const tokens = await this.tokenService.generateTokens({
       id: createUser.id,
       role: createUser.role,
     });
     return tokens;
   }
 
-  async generateTokens(user: JWTPayload): Promise<Tokens> {
-    return {
-      accessToken: await this.generateJWTToken(user),
-      refreshToken: this.generateRefreshToken(),
-    };
-  }
-
-  async generateJWTToken(user: JWTPayload): Promise<AccessToken> {
-    return await this.jwtService.signAsync({
+  async refresh(user: JWTPayload): Promise<Tokens> {
+    const tokens = await this.tokenService.generateTokens({
       id: user.id,
       role: user.role,
     });
-  }
-
-  async verifyJWTToken(token: string): Promise<any> {
-    return await this.jwtService.verifyAsync(token);
-  }
-
-  decodeJWTToken(token: string): string | { [key: string]: any } {
-    return this.jwtService.decode(token);
-  }
-
-  generateRefreshToken(): RefreshToken {
-    return uuidv4();
+    return tokens;
   }
 }
