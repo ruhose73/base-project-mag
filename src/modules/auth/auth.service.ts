@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Tokens } from './interfaces';
+import { JWTPayload, Tokens } from './interfaces';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../user/model/user.model';
@@ -23,7 +23,7 @@ export class AuthService {
       throw new BadRequestException(`wrong data`);
     }
     if (!(await compare(dto.password, user.password))) {
-      throw new BadRequestException(`wrong password`);
+      throw new BadRequestException(`wrong data`);
     }
     return await this.tokenService.generateTokens({
       id: user.id,
@@ -43,6 +43,14 @@ export class AuthService {
     const tokens = await this.tokenService.generateTokens({
       id: createUser.id,
       role: createUser.role,
+    });
+    return tokens;
+  }
+
+  async refresh(user: JWTPayload): Promise<Tokens> {
+    const tokens = await this.tokenService.generateTokens({
+      id: user.id,
+      role: user.role,
     });
     return tokens;
   }
