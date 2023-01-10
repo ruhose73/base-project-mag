@@ -1,5 +1,3 @@
-import { Login, Register, UpdatePasswordPayload } from './auth.interface';
-
 import {
   Tokens,
   JWTPayload,
@@ -9,9 +7,6 @@ import {
 } from './token.interface';
 
 export {
-  Login,
-  Register,
-  UpdatePasswordPayload,
   Tokens,
   JWTPayload,
   TokenCreationAttributes,

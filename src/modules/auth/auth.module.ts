@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getJWTConfig } from 'src/configs';
+import { TokenService } from './token.service';
 
 @Module({
   imports: [
@@ -16,8 +17,8 @@ import { getJWTConfig } from 'src/configs';
       useFactory: getJWTConfig,
     }),
   ],
-  providers: [AuthService],
+  providers: [AuthService, TokenService],
   controllers: [AuthController],
-  exports: [],
+  exports: [TokenService],
 })
 export class AuthModule {}
