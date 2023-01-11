@@ -2,7 +2,7 @@ import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, RefreshTokenDto, TokenDto } from './dto';
 import { JWTPayload, Tokens } from './interfaces';
-import { ExtractUserFromRequest } from 'src/common/decorators';
+import { ExtractUserFromRequest, Roles } from 'src/common/decorators';
 import { RefreshTokenGuard, RegisterGuard, LoginGuard } from './guards';
 import {
   ApiBearerAuth,
@@ -12,6 +12,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
 @ApiTags(`Авторизация`)
 @Controller()
 export class AuthController {

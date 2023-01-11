@@ -12,7 +12,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   if (configService.get('config.nodeEnv') !== 'production') {
     const config = new DocumentBuilder()
-      .setTitle(`BASE PROJECT`)
+      .setTitle(`Базовый дипломный проект`)
       .setDescription(`Документация API`)
       .setVersion(`1.0.0`)
       .addServer(`${configService.get('config.server.api')}`)
