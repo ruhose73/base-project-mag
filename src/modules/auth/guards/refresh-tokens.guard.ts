@@ -22,7 +22,12 @@ export class RefreshTokenGuard implements CanActivate {
     if (bearer !== 'Bearer' || !token || !refreshToken) {
       throw new UnauthorizedException(`No user tokens`);
     }
-    const tokenPayload = this.tokenService.decodeJWTToken(token);
+    let tokenPayload;
+    if (process.env.NODE_ENV !== 'production') {
+      tokenPayload = this.tokenService.decodeJWTToken(token);
+    } else {
+      tokenPayload = await this.tokenService.verifyJWTToken(token);
+    }
     if (!tokenPayload) {
       throw new UnauthorizedException(`Token is not valid`);
     }

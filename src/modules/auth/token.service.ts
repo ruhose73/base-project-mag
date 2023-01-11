@@ -13,7 +13,6 @@ export class TokenService {
       refreshToken: this.generateRefreshToken(),
     };
   }
-
   async generateJWTToken(user: JWTPayload): Promise<AccessToken> {
     return await this.jwtService.signAsync({
       id: user.id,
