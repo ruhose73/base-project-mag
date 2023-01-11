@@ -1,4 +1,4 @@
-import { UserRole } from 'src/enums';
+import { UserRole, UserStatus } from 'src/enums';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -29,6 +29,14 @@ export class User {
     nullable: false,
   })
   role: UserRole;
+
+  @Column({
+    type: 'enum',
+    enum: UserStatus,
+    default: UserStatus.UnActive,
+    nullable: false,
+  })
+  status: UserStatus;
 
   @Column({ type: 'boolean', default: false })
   isActive: boolean;
