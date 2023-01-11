@@ -10,7 +10,7 @@ import { TokenService } from './token.service';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
 import { JwtStrategy } from 'src/common/strategies/jwt.strategy';
-import { RefreshTokenGuard } from './refresh-tokens.guard';
+import { RefreshTokenGuard } from './guards/refresh-tokens.guard';
 
 @Module({
   imports: [
