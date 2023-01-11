@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { AccessToken, JWTPayload, RefreshToken, Tokens } from './interfaces';
+import { JWTPayload } from './interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
+import { TokenDto } from './dto';
+import { AccessToken, RefreshToken } from './types';
 
 @Injectable()
 export class TokenService {
   constructor(private jwtService: JwtService) {}
 
-  async generateTokens(user: JWTPayload): Promise<Tokens> {
+  async generateTokens(user: JWTPayload): Promise<TokenDto> {
     return {
       accessToken: await this.generateJWTToken(user),
       refreshToken: this.generateRefreshToken(),

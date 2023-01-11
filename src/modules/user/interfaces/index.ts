@@ -1,8 +1,3 @@
-import { UserRole } from 'src/enums';
+import { UserCreationAttributes } from './user-creation-attributes.interface';
 
-export interface UserCreationAttributes {
-  login: string;
-  password: string;
-  name: string;
-  role?: UserRole;
-}
+export { UserCreationAttributes };

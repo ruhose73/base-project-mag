@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { AccessToken, RefreshToken } from '../interfaces';
+import { AccessToken, RefreshToken } from '../types';
 
 export class TokenDto {
   @IsNotEmpty()

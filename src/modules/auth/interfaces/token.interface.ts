@@ -1,14 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsUUID } from 'class-validator';
 import { UserRole } from 'src/enums/users-roles.enum';
+import { AccessToken, RefreshToken } from '../types';
 
-export type AccessToken = string;
-export type RefreshToken = string;
-
-export class Tokens {
-  accessToken: AccessToken;
-  refreshToken: RefreshToken;
-}
 export interface JWTPayload {
   id: string;
   role: UserRole;
