@@ -2,35 +2,29 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { TokenService } from './token.service';
+import { TokenService } from '../token.service';
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {
   constructor(private readonly tokenService: TokenService) {}
 
-  async canActivate(
-    context: ExecutionContext,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest();
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-      throw new BadRequestException();
+      throw new UnauthorizedException(`No auth user token`);
     }
     const bearer = authHeader.split(' ')[0];
     const token = authHeader.split(' ')[1];
     const { refreshToken } = req.body;
     if (bearer !== 'Bearer' || !token || !refreshToken) {
-      throw new BadRequestException();
+      throw new UnauthorizedException(`No user tokens`);
     }
     const tokenPayload = this.tokenService.decodeJWTToken(token);
     if (!tokenPayload) {
-      throw new BadRequestException('bad token');
+      throw new UnauthorizedException(`Token is not valid`);
     }
     req.user = tokenPayload;
     return true;

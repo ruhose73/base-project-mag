@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
 import { JWTPayload, Tokens } from './interfaces';
 import { ExtractUserFromRequest } from 'src/common/decorators';
-import { RefreshTokenGuard } from './refresh-tokens.guard';
+import { RefreshTokenGuard } from './guards/refresh-tokens.guard';
 
 @Controller()
 export class AuthController {
