@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { JWTPayload, Tokens } from './interfaces';
+import { JWTPayload } from './interfaces';
 import { TokenService } from './token.service';
-import { RegisterDto } from './dto';
+import { RegisterDto, TokenDto } from './dto';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -11,11 +11,11 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async login(user: JWTPayload): Promise<Tokens> {
+  async login(user: JWTPayload): Promise<TokenDto> {
     return await this.tokenService.generateTokens(user);
   }
 
-  async register(dto: RegisterDto): Promise<Tokens> {
+  async register(dto: RegisterDto): Promise<TokenDto> {
     const user = await this.userService.saveUser(dto);
     return await this.tokenService.generateTokens({
       id: user.id,
@@ -23,7 +23,7 @@ export class AuthService {
     });
   }
 
-  async refresh(user: JWTPayload): Promise<Tokens> {
+  async refresh(user: JWTPayload): Promise<TokenDto> {
     return await this.tokenService.generateTokens(user);
   }
 }

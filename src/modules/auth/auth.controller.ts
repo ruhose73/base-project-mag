@@ -1,8 +1,8 @@
 import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, RefreshTokenDto, TokenDto } from './dto';
-import { JWTPayload, Tokens } from './interfaces';
-import { ExtractUserFromRequest, Roles } from 'src/common/decorators';
+import { JWTPayload } from './interfaces';
+import { ExtractUserFromRequest } from 'src/common/decorators';
 import { RefreshTokenGuard, RegisterGuard, LoginGuard } from './guards';
 import {
   ApiBearerAuth,
@@ -25,7 +25,7 @@ export class AuthController {
   @ApiResponse({ status: 500, description: `INTERNAL_SERVER_ERROR` })
   @Post('/login')
   @UseGuards(LoginGuard)
-  async login(@ExtractUserFromRequest() user: JWTPayload): Promise<Tokens> {
+  async login(@ExtractUserFromRequest() user: JWTPayload): Promise<TokenDto> {
     return this.authService.login(user);
   }
 
@@ -36,7 +36,9 @@ export class AuthController {
   @ApiResponse({ status: 500, description: `INTERNAL_SERVER_ERROR` })
   @Post('/register')
   @UseGuards(RegisterGuard)
-  async register(@ExtractUserFromRequest() user: RegisterDto): Promise<Tokens> {
+  async register(
+    @ExtractUserFromRequest() user: RegisterDto,
+  ): Promise<TokenDto> {
     return this.authService.register(user);
   }
 
@@ -54,7 +56,7 @@ export class AuthController {
   @ApiBearerAuth()
   @Get('/refresh')
   @UseGuards(RefreshTokenGuard)
-  async refresh(@ExtractUserFromRequest() user: JWTPayload): Promise<Tokens> {
+  async refresh(@ExtractUserFromRequest() user: JWTPayload): Promise<TokenDto> {
     return this.authService.refresh(user);
   }
 }

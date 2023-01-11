@@ -1,15 +1,3 @@
-import {
-  Tokens,
-  JWTPayload,
-  TokenCreationAttributes,
-  AccessToken,
-  RefreshToken,
-} from './token.interface';
+import { JWTPayload, TokenCreationAttributes } from './token.interface';
 
-export {
-  Tokens,
-  JWTPayload,
-  TokenCreationAttributes,
-  AccessToken,
-  RefreshToken,
-};
+export { JWTPayload, TokenCreationAttributes };
