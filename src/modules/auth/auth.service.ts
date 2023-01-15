@@ -19,13 +19,12 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto): Promise<TokenDto> {
-    this.mailService.confirmMessage({
-      user: 'Misha',
-      link: 'dfdfgdgdg',
-      subject: 'dfgdgdgdgagfdsf',
-      to: 'ruhose73@gmail.com',
-    });
     const user = await this.userService.saveUser(dto);
+    this.mailService.confirmMessage({
+      user: dto.name,
+      link: dto.activationLink,
+      to: dto.email,
+    });
     return await this.tokenService.generateTokens({
       id: user.id,
       role: user.role,
