@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsPhoneNumber, IsString, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+  IsUUID,
+  Length,
+} from 'class-validator';
 
 export class RegisterDto {
   @ApiProperty({ example: `+79998404904`, description: `Номер телефона` })
@@ -18,4 +25,14 @@ export class RegisterDto {
   @IsString()
   @Length(2, 16)
   name: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsUUID()
+  activationLink: string;
 }

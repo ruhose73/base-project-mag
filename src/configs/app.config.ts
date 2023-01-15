@@ -17,6 +17,20 @@ interface IAppConfig {
     jwtSecret: string;
     jwtExpiresIn: string;
   };
+  mail: {
+    transport: {
+      host: string;
+      port: number;
+      secure: boolean;
+      auth: {
+        user: string;
+        pass: string;
+      };
+    };
+    defaults: {
+      from: string;
+    };
+  };
 }
 
 //добавить валидатор
@@ -38,6 +52,20 @@ export default registerAs(
     jwt: {
       jwtSecret: process.env.JWT_SECRET,
       jwtExpiresIn: process.env.JWT_EXPIRES_IN,
+    },
+    mail: {
+      transport: {
+        host: process.env.MAIL_HOST,
+        port: parseInt(process.env.MAIL_PORT, 10) || 587,
+        secure: false,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      },
+      defaults: {
+        from: process.env.MAIL_USER,
+      },
     },
   }),
 );
