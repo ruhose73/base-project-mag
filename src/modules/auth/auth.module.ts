@@ -11,11 +11,13 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
 import { JwtStrategy } from 'src/common/strategies/jwt.strategy';
 import { RefreshTokenGuard } from './guards/refresh-tokens.guard';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
     PassportModule,
     ConfigModule,
+    MailModule,
     forwardRef(() => UserModule),
     TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync({

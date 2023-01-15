@@ -17,10 +17,16 @@ export class User {
   login: string;
 
   @Column({ type: 'varchar', length: 20, nullable: false })
+  email: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: false })
   name: string;
 
   @Column({ type: 'varchar', nullable: false })
   password: string;
+
+  @Column({ type: 'uuid', nullable: false })
+  activationLink: string;
 
   @Column({
     type: 'enum',

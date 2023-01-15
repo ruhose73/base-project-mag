@@ -1,4 +1,12 @@
-import { Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, RefreshTokenDto, TokenDto } from './dto';
 import { JWTPayload } from './interfaces';
@@ -12,6 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { confirmMessage } from '../mail/templates';
 
 @ApiTags(`Авторизация`)
 @Controller()
@@ -58,5 +67,10 @@ export class AuthController {
   @UseGuards(RefreshTokenGuard)
   async refresh(@ExtractUserFromRequest() user: JWTPayload): Promise<TokenDto> {
     return this.authService.refresh(user);
+  }
+
+  @Get('/activate/:link')
+  async activate(@Param('link', ParseUUIDPipe) link: string) {
+    return this.authService.activate(link);
   }
 }
