@@ -12,10 +12,6 @@ export class ConfirmMessageDto {
 
   @IsNotEmpty()
   @IsString()
-  subject: string;
-
-  @IsNotEmpty()
-  @IsString()
   @IsEmail()
   to: string;
 }
