@@ -5,23 +5,18 @@ import { User } from '../model/user.model';
 
 export class UserDto {
   @ApiProperty({ example: `+79998404904`, description: `Номер телефона` })
-  @IsNotEmpty()
   login?: string;
 
   @ApiProperty({ example: `mail@mail.mail`, description: `Почта пользователя` })
-  @IsNotEmpty()
   email?: string;
 
   @ApiProperty({ example: ` Михаил`, description: `Имя пользователя` })
-  @IsNotEmpty()
   name?: string;
 
-  @ApiProperty({ type:UserRole, description: `Роль пользователя` })
-  @IsNotEmpty()
+  @ApiProperty({ enum: UserRole, description: `Роль пользователя` })
   role?: UserRole;
 
-  @ApiProperty({ type:UserStatus, description: `Статус пользователя` })
-  @IsNotEmpty()
+  @ApiProperty({ enum:UserStatus, description: `Статус пользователя` })
   status?: UserStatus;
 
   constructor(user: User) {

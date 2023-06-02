@@ -16,13 +16,14 @@ import {
   ApiBody,
   ApiHeader,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { UserDto } from '../user/dto';
 
 @ApiTags(`Авторизация`)
-@Controller()
+@Controller(`auth`)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -69,8 +70,12 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: `Активация аккуанта` })
-  @ApiBody({ type: LoginDto })
-  @ApiResponse({ status: 200, type: TokenDto })
+  @ApiParam({
+    name: 'link',
+    description: 'Ссылка активации',
+    required: true,
+  })
+  @ApiResponse({ status: 200, type: UserDto })
   @ApiResponse({ status: 400, description: `BAD_REQUEST` })
   @ApiResponse({ status: 500, description: `INTERNAL_SERVER_ERROR` })
   @Get('/activate/:link')

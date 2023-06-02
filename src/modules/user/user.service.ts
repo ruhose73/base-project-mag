@@ -28,6 +28,11 @@ export class UserService {
     return new UserDto(user);
   }
 
+  async getUserInfoById(id: string): Promise<UserDto | null> {
+    const user: User = await this.userRepository.findOneBy({id:id});
+    return new UserDto(user);
+  }
+
   async findByLink(link: string): Promise <User | null> {
     return await this.userRepository.findOne({
       where: {
