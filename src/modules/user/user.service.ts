@@ -20,11 +20,20 @@ export class UserService {
     return await this.userRepository.save(dto);
   }
 
-  async activateUser(link:string): Promise<UserDto| null>  {
-    const user:User = await this.userRepository.save({
-      link:link,
-      isActive:true
+  async activateUser(link: string): Promise<UserDto | null> {
+    const user: User = await this.userRepository.save({
+      link: link,
+      isActive: true,
     });
-    return new UserDto(user)
+    return new UserDto(user);
+  }
+
+  async findByLink(link: string): Promise <User | null> {
+    return await this.userRepository.findOne({
+      where: {
+        activationLink: link,
+        isActive: true,
+      },
+    });
   }
 }
