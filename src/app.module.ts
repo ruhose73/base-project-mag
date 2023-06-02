@@ -12,6 +12,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EventModule } from './modules/events/events.module';
+import { NoteModule } from './modules/note/note.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { EventModule } from './modules/events/events.module';
     EventEmitterModule.forRoot(getEventConfig),
     UserModule,
     AuthModule,
+    NoteModule,
     EventModule,
   ],
   controllers: [],
