@@ -5,8 +5,10 @@ import {
   Column,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { USER_TABLE_NAME } from '../constants';
+import { Note } from 'src/modules/note/model/note.model';
 
 @Entity(USER_TABLE_NAME)
 export class User {
@@ -52,4 +54,7 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastChangedDateTime: Date;
+
+  // RELATIONS
+  @OneToMany(type => Note, note => note.user) notes: Note[];  
 }

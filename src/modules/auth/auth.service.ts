@@ -4,7 +4,7 @@ import { TokenService } from './token.service';
 import { RegisterDto, TokenDto } from './dto';
 import { UserService } from '../user/user.service';
 import { MailService } from '../mail/mail.service';
-import path from 'path';
+import { UserDto } from '../user/dto';
 
 @Injectable()
 export class AuthService {
@@ -35,5 +35,7 @@ export class AuthService {
     return await this.tokenService.generateTokens(user);
   }
 
-  async activate(link: string) {}
+  async activate(link: string): Promise<UserDto | null>{
+    return await this.userService.activateUser(link)
+  }
 }

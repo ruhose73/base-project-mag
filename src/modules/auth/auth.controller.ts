@@ -4,26 +4,26 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, RefreshTokenDto, TokenDto } from './dto';
 import { JWTPayload } from './interfaces';
 import { ExtractUserFromRequest } from 'src/common/decorators';
-import { RefreshTokenGuard, RegisterGuard, LoginGuard } from './guards';
+import { RefreshTokenGuard, RegisterGuard, LoginGuard, ActivationGuard } from './guards';
 import {
   ApiBearerAuth,
   ApiBody,
   ApiHeader,
   ApiOperation,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { confirmMessage } from '../mail/templates';
+import { UserDto } from '../user/dto';
 
 @ApiTags(`Авторизация`)
-@Controller()
+@Controller(`auth`)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -69,8 +69,18 @@ export class AuthController {
     return this.authService.refresh(user);
   }
 
+  @ApiOperation({ summary: `Активация аккуанта` })
+  @ApiParam({
+    name: 'link',
+    description: 'Ссылка активации',
+    required: true,
+  })
+  @ApiResponse({ status: 200, type: UserDto })
+  @ApiResponse({ status: 400, description: `BAD_REQUEST` })
+  @ApiResponse({ status: 500, description: `INTERNAL_SERVER_ERROR` })
   @Get('/activate/:link')
-  async activate(@Param('link', ParseUUIDPipe) link: string) {
+  @UseGuards(ActivationGuard)
+  async activate(@Param('link', ParseUUIDPipe) link: string): Promise<UserDto | null> {
     return this.authService.activate(link);
   }
 }
