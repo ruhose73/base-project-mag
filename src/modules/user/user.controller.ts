@@ -11,7 +11,7 @@ import {
 } from '@nestjs/swagger';
 import { UserDto } from './dto';
 import { JwtAuthGuard, RolesGuard } from 'src/common/guards';
-import { UserRole } from 'src/enums';
+import { UserRole } from './enum';
 
 @ApiTags(`Пользователь`)
 @Controller(`user`)
