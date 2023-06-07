@@ -1,4 +1,4 @@
-import { UserRole } from 'src/enums';
+import { UserRole } from '../enum';
 
 export interface UserCreationAttributes {
   login: string;

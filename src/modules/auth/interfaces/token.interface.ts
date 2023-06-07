@@ -1,4 +1,4 @@
-import { UserRole } from 'src/enums/users-roles.enum';
+import { UserRole } from '../../user/enum';
 import { AccessToken, RefreshToken } from '../types';
 
 export interface JWTPayload {

@@ -29,6 +29,9 @@ export class Note {
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   lastChangedDateTime: Date;
 
+  @Column({ type: 'uuid', nullable: false })
+  userId:string
+
   // RELATIONS
   @ManyToOne(type => User, user => user.notes) user: User; 
 }
