@@ -15,5 +15,8 @@ export const getPostgresConfig = async (
     database: configService.get('config.postgres.postgresDatabase'),
     entities: [User, Note],
     synchronize: true,
+    logging: "all",
+    logNotifications:true,
+    logger:"advanced-console"
   };
 };

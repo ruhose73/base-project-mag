@@ -50,7 +50,7 @@ export class NoteController {
     @Param('noteId', ParseUUIDPipe) noteId: string,
     @Body() dto: UpdateNoteDto,
   ): Promise<INote | UpdateResult | null> {
-    return await this.noteService.updateNoteSlow(noteId, dto );
+    return await this.noteService.updateNote(noteId, user.id, dto );
   }
 
   @Get()

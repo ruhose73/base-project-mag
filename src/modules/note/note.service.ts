@@ -25,23 +25,20 @@ export class NoteService {
     return new NoteDto(note);
   }
 
-  //перенести на sql
-  async updateNote(noteId:string, dto: UpdateNoteDto): Promise<INote | null | UpdateResult> {
-    const base = 'public."Note"'
-    const sql = await this.noteRepository
+  async updateNote(noteId:string, userId:string, dto: UpdateNoteDto): Promise<INote | null > {
+    const raw = await this.noteRepository
     .createQueryBuilder()
     .update()
     .set(dto)
-    .where("'id' = :id AND 'userId' = :userId", { id: noteId, userId: dto.userId })
-    .returning(["id","title", "description", "status", "lastChangedDateTime" ])
-    .getQuery();
-    console.log(sql)
-    return null
+    .where("id = :id AND userId = :userId", { id: noteId, userId: userId })
+    .returning(['id','title', 'description', 'status', 'lastChangedDateTime' ])
+    .execute();
+    return raw.raw[0]
   }
 
-  async updateNoteSlow(noteId:string, dto: UpdateNoteDto): Promise<INote | null > {
-    const note = await this.noteRepository.save({id:noteId, ...dto})
-    return new NoteDto(note)
+  async updateNoteSlow(noteId:string, userId:string, dto: UpdateNoteDto): Promise<INote | null |UpdateResult> {
+    await this.noteRepository.update({id:noteId, userId:userId}, dto)
+    return this.getNote({ userId: userId, noteId:noteId})
   }
 
   async deleteNote(dto: DeleteNoteDto): Promise<void> {
