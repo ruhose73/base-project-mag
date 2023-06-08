@@ -8,6 +8,8 @@ import {
   Post,
   Put,
   UseGuards,
+  Param,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { NoteService } from './note.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -41,13 +43,14 @@ export class NoteController {
     return await this.noteService.createNote({ userId: user.id, ...dto });
   }
 
-  @Put()
+  @Put(':noteId')
   @Roles(UserRole.User, UserRole.Manager, UserRole.Admin)
   async updateNote(
     @ExtractUserFromRequest() user: JWTPayload,
+    @Param('noteId', ParseUUIDPipe) noteId: string,
     @Body() dto: UpdateNoteDto,
   ): Promise<INote | UpdateResult | null> {
-    return await this.noteService.updateNote({ userId: user.id, ...dto });
+    return await this.noteService.updateNoteSlow(noteId, dto );
   }
 
   @Get()

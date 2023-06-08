@@ -12,12 +12,12 @@ import {
   
     async canActivate(context: ExecutionContext): Promise<boolean> {
       const req = context.switchToHttp().getRequest();
-      const link:string = req.params;
+      const link = req.params.link;
       const user = await this.userService.findByLink(link);
-      if (user) {
+      if (!user) {
         throw new BadRequestException(`User already activated`);
       }
-      req.params = link;
+      req.params.link = link;
       return true;
     }
   }

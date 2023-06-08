@@ -5,6 +5,7 @@ import {
   ParseUUIDPipe,
   Post,
   UseGuards,
+  HttpCode
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto, RefreshTokenDto, TokenDto } from './dto';
@@ -79,8 +80,9 @@ export class AuthController {
   @ApiResponse({ status: 400, description: `BAD_REQUEST` })
   @ApiResponse({ status: 500, description: `INTERNAL_SERVER_ERROR` })
   @Get('/activate/:link')
+  @HttpCode(204)
   @UseGuards(ActivationGuard)
-  async activate(@Param('link', ParseUUIDPipe) link: string): Promise<UserDto | null> {
+  async activate(@Param('link', ParseUUIDPipe) link: string): Promise <void>{
     return this.authService.activate(link);
   }
 }

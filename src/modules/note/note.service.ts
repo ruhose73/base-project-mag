@@ -25,14 +25,23 @@ export class NoteService {
     return new NoteDto(note);
   }
 
-  async updateNote(dto: UpdateNoteDto): Promise<INote | null | UpdateResult> {
-    return await this.noteRepository
+  //перенести на sql
+  async updateNote(noteId:string, dto: UpdateNoteDto): Promise<INote | null | UpdateResult> {
+    const base = 'public."Note"'
+    const sql = await this.noteRepository
     .createQueryBuilder()
     .update()
     .set(dto)
-    .where("id = :id AND userId = :userId", { id: dto.noteId, userId: dto.userId })
+    .where("'id' = :id AND 'userId' = :userId", { id: noteId, userId: dto.userId })
     .returning(["id","title", "description", "status", "lastChangedDateTime" ])
-    .execute(); 
+    .getQuery();
+    console.log(sql)
+    return null
+  }
+
+  async updateNoteSlow(noteId:string, dto: UpdateNoteDto): Promise<INote | null > {
+    const note = await this.noteRepository.save({id:noteId, ...dto})
+    return new NoteDto(note)
   }
 
   async deleteNote(dto: DeleteNoteDto): Promise<void> {
@@ -41,6 +50,10 @@ export class NoteService {
     .delete()
     .where("id = :id AND userId = :userId", { id: dto.noteId, userId: dto.userId })
     .execute()
+  }
+
+  async deleteNoteSlow(dto: DeleteNoteDto): Promise<void> {
+    await this.noteRepository.delete(dto.noteId)
   }
 
   async getAllNotes(dto: GetAllNotesDto): Promise<INote[] | null | []> {
@@ -71,8 +84,8 @@ export class NoteService {
         lastChangedDateTime:true
       },
       where: [
-        { userId: dto.userId, title: ILike(`%${dto.phrase}#%`) },
-        { userId: dto.userId, description: ILike(`%${dto.phrase}#%`) },
+        { userId: dto.userId, title: ILike(`%${dto.phrase}%`) },
+        { userId: dto.userId, description: ILike(`%${dto.phrase}%`) },
       ],
       order: {
         title: 'ASC',
@@ -93,5 +106,10 @@ export class NoteService {
       },
       where: { id: dto.noteId, userId: dto.userId }
     });
+  }
+
+  async getNoteSlow(dto: GetNoteDto): Promise<INote | null> {
+    const note = await this.noteRepository.findOneBy({id:dto.noteId})
+    return new NoteDto(note)
   }
 }

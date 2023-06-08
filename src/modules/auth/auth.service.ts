@@ -35,7 +35,7 @@ export class AuthService {
     return await this.tokenService.generateTokens(user);
   }
 
-  async activate(link: string): Promise<UserDto | null>{
+  async activate(link: string): Promise<void>{
     return await this.userService.activateUser(link)
   }
 }
